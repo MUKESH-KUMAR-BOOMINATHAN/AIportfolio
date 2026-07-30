@@ -162,7 +162,7 @@ export default function BeyondTech() {
           return (
             <motion.div
               key={idx}
-              className={`glass-panel rounded-2xl p-6 border flex flex-col justify-between transition-all duration-300 hover:shadow-xl relative overflow-hidden ${act.colorClass} ${idx === 0 ? "md:col-span-2" : ""}`}
+              className={`glass-panel h-full rounded-2xl p-6 border flex flex-col justify-between transition-all duration-300 hover:shadow-xl relative overflow-hidden ${act.colorClass} ${idx === 0 ? "md:col-span-2" : ""}`}
               variants={customVariants}
               whileHover={customHover}
               style={customStyle}

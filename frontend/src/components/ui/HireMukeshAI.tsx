@@ -70,7 +70,7 @@ export default function HireMukeshAI() {
     if (!process.env.NEXT_PUBLIC_API_URL) {
       console.warn(
         "WARNING: NEXT_PUBLIC_API_URL is undefined at runtime. " +
-        "HireMukeshkumar AI falls back to http://localhost:8000. " +
+        "HireMukeshkumar AI uses the configured backend API URL. " +
         "Make sure to configure it in frontend/.env.local if your backend is hosted elsewhere."
       );
     }
@@ -82,6 +82,12 @@ export default function HireMukeshAI() {
       // Trigger tooltip 3 seconds after page loads
       const timer = setTimeout(() => {
         setShowTooltip(true);
+        // Auto-hide tooltip after 6 seconds
+        setTimeout(() => {
+          setShowTooltip(false);
+          setIsTooltipDismissed(true);
+          sessionStorage.setItem("ai-chat-tooltip-dismissed", "true");
+        }, 6000);
       }, 3000);
       return () => clearTimeout(timer);
     }
@@ -128,7 +134,10 @@ export default function HireMukeshAI() {
     setMessages(prev => [...prev, { role: "assistant", content: "" }]);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        throw new Error("NEXT_PUBLIC_API_URL environment variable is not defined");
+      }
       const response = await fetch(`${apiUrl}/api/chat`, {
         method: "POST",
         headers: {
@@ -216,7 +225,7 @@ export default function HireMukeshAI() {
         const updated = [...prev];
         updated[updated.length - 1] = {
           role: "assistant",
-          content: "Sorry, I had trouble reaching my AI backend. Please verify that the server is active at `http://localhost:8000` or configure the backend `.env` file."
+          content: "Sorry, I had trouble reaching my AI backend. Please verify that the server is active or configure the frontend `.env.local` file with `NEXT_PUBLIC_API_URL`."
         };
         return updated;
       });
@@ -246,8 +255,8 @@ export default function HireMukeshAI() {
             exit={{ opacity: 0, y: 15, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 25 }}
           >
-            <div className="flex-1 font-semibold leading-relaxed">
-              Got a question? Ask me anything directly! 👋
+            <div className="flex-1 font-semibold leading-relaxed break-words min-w-0">
+              👋 Ask me about Mukeshkumar's work!
             </div>
             <button
               onClick={handleDismissTooltip}
@@ -262,7 +271,6 @@ export default function HireMukeshAI() {
         )}
       </AnimatePresence>
 
-      {/* Floating Toggle Button (Dynamic animation states) */}
       <motion.button
         onClick={handleOpenChat}
         className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-gradient-to-r from-accent to-accent-secondary text-white shadow-lg shadow-accent/20 border border-white/20 hover:scale-105 active:scale-95 transition-transform duration-200 focus:outline-none flex items-center gap-2 cursor-pointer"
@@ -271,13 +279,8 @@ export default function HireMukeshAI() {
         transition={{ delay: 1, type: "spring", stiffness: 260, damping: 20 }}
         aria-label="Chat with HireMukeshkumar AI"
       >
-        <MessageSquare className={`w-6 h-6 ${!isTooltipDismissed ? "animate-pulse" : ""}`} />
+        <MessageSquare className="w-6 h-6" />
         <span className="text-sm font-semibold pr-1 hidden md:inline">HireMukeshkumar AI</span>
-        
-        {/* Blinking glow halo disabled once session tooltip is dismissed */}
-        {!isTooltipDismissed && (
-          <span className="absolute inset-0 rounded-full bg-accent animate-ping opacity-15 pointer-events-none z-[-1]" />
-        )}
       </motion.button>
 
       {/* Chat Drawer Side Panel */}
@@ -300,11 +303,11 @@ export default function HireMukeshAI() {
                   {/* Status Indicator */}
                   <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-success border-2 border-background animate-pulse" />
                 </div>
-                <div>
-                  <h3 className="font-heading font-bold text-base text-white tracking-wide flex items-center gap-1.5">
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-heading font-bold text-base text-white tracking-wide flex items-center gap-1.5 break-words">
                     HireMukeshkumar AI
                   </h3>
-                  <p className="text-xs text-muted flex items-center gap-1">
+                  <p className="text-xs text-muted flex items-center gap-1 break-words truncate">
                     Mukeshkumar Boominathan's AI Representative
                   </p>
                 </div>

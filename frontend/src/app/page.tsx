@@ -7,7 +7,6 @@ import Skills from "@/components/sections/Skills";
 import Projects from "@/components/sections/Projects";
 import BeyondTech from "@/components/sections/BeyondTech";
 import Certifications from "@/components/sections/Certifications";
-import Contact from "@/components/sections/Contact";
 import Footer from "@/components/layout/Footer";
 import HireMukeshAI from "@/components/ui/HireMukeshAI";
 
@@ -18,7 +17,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main content wrapper */}
-      <main className="relative flex flex-col w-full z-10 pt-16">
+      <main className="relative flex flex-col w-full z-10 pt-16 pb-24">
         {/* Sections */}
         <Hero />
         <About />
@@ -27,7 +26,6 @@ export default function Home() {
         <Projects />
         <BeyondTech />
         <Certifications />
-        <Contact />
       </main>
 
       {/* Footer block */}

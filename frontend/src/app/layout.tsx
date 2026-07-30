@@ -1,15 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const outfit = Outfit({
+  variable: "--font-heading",
   subsets: ["latin"],
   display: "swap",
 });
@@ -69,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full scroll-smooth`}
+      className={`${plusJakartaSans.variable} ${outfit.variable} h-full scroll-smooth`}
     >
       <body className="min-h-full bg-background text-foreground antialiased selection:bg-accent/30 selection:text-white flex flex-col font-sans">
         {children}

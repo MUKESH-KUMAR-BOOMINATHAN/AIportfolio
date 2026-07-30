@@ -24,8 +24,7 @@ export default function Navbar() {
     { label: "Experience", href: "#experience" },
     { label: "Skills", href: "#skills" },
     { label: "Projects", href: "#projects" },
-    { label: "Beyond Tech", href: "#beyond-tech" },
-    { label: "Contact", href: "#contact" }
+    { label: "Beyond Tech", href: "#beyond-tech" }
   ];
 
   return (

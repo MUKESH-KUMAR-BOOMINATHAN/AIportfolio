@@ -104,7 +104,7 @@ Rules:
         # Configure model configurations
         config = types.GenerateContentConfig(
             system_instruction=system_instruction,
-            temperature=0.7
+            temperature=0.3
         )
         
         async def event_generator():
@@ -115,7 +115,7 @@ Rules:
                 
                 # Stream the Gemini response using the new SDK generate_content_stream call
                 response = client.models.generate_content_stream(
-                    model='gemini-2.0-flash',
+                    model='gemini-flash-latest',
                     contents=contents,
                     config=config
                 )

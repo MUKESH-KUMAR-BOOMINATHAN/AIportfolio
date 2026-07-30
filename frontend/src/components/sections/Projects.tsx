@@ -107,7 +107,7 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
         transformStyle: "preserve-3d",
         perspective: 1000
       }}
-      className="glass-panel rounded-2xl p-6 border-glass-border hover:border-accent/40 transition-colors flex flex-col justify-between glow-card relative cursor-pointer"
+      className="glass-panel rounded-2xl p-6 border-glass-border hover:border-accent/40 transition-colors flex flex-col justify-between glow-card relative cursor-pointer h-full"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
@@ -139,7 +139,7 @@ function ProjectCard({ project, onSelect }: { project: Project; onSelect: (p: Pr
         </div>
 
         {/* Title */}
-        <h3 className="text-lg font-heading font-bold text-white line-clamp-1">
+        <h3 className="text-lg font-heading font-bold text-white line-clamp-2 break-words">
           {project.title}
         </h3>
 
@@ -313,7 +313,7 @@ export default function Projects() {
                       {selectedProject.stack.map((tag, idx) => (
                         <span
                           key={idx}
-                          className="text-xs px-2.5 py-1 rounded-lg bg-card border border-glass-border text-white"
+                          className="text-xs px-2.5 py-1 rounded-lg bg-card border border-glass-border text-white whitespace-nowrap"
                         >
                           {tag}
                         </span>

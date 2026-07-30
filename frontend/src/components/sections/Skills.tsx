@@ -147,7 +147,7 @@ export default function Skills() {
               className="grid grid-cols-1 md:grid-cols-2 gap-8"
             >
               {/* Left Column: Narrative & Focus details */}
-              <div className="glass-panel rounded-2xl p-6 md:p-8 space-y-6 flex flex-col justify-between border border-accent/20 relative overflow-hidden">
+              <div className="glass-panel h-full rounded-2xl p-6 md:p-8 space-y-6 flex flex-col justify-between border border-accent/20 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-2xl pointer-events-none" />
                 
                 <div className="space-y-4">
@@ -183,7 +183,7 @@ export default function Skills() {
                 {AI_SKILLS.map((skill, idx) => (
                   <motion.div
                     key={idx}
-                    className="glass-panel rounded-xl p-4 flex items-center justify-between border border-glass-border hover:border-accent-secondary/40 transition-colors glow-card cursor-default"
+                    className="glass-panel h-full rounded-xl p-4 flex items-center justify-between border border-glass-border hover:border-accent-secondary/40 transition-colors glow-card cursor-default"
                     variants={tagVariants}
                     whileHover={{ scale: 1.03, y: -2 }}
                   >
@@ -205,7 +205,7 @@ export default function Skills() {
               {TECHNICAL_SKILLS.map((group, idx) => (
                 <motion.div
                   key={idx}
-                  className="glass-panel rounded-2xl p-5 border border-glass-border hover:border-accent/30 transition-colors flex flex-col justify-between"
+                  className="glass-panel h-full rounded-2xl p-5 border border-glass-border hover:border-accent/30 transition-colors flex flex-col justify-between"
                   variants={tagVariants}
                   whileHover={{ y: -3 }}
                 >

@@ -43,14 +43,17 @@ export default function Contact() {
     // Simulate network submission delay
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // In a fully deployed setup, this could submit to an API route.
-    // For now we simulate success and show direct contact pathways.
+    // Trigger the native mail client as an end-to-end fallback since this is a static site without a direct email API
+    window.location.href = `mailto:mukeshkumarb107@gmail.com?subject=${encodeURIComponent(formData.subject || 'Message from Portfolio')}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    )}`;
+
     setStatus("success");
     setFormData({ name: "", email: "", subject: "", message: "" });
   };
 
   return (
-    <section id="contact" className="py-20 px-4 md:px-8 max-w-6xl mx-auto w-full border-b border-glass-border">
+    <section id="contact" className="py-20 pb-32 lg:pb-20 px-4 md:px-8 max-w-6xl mx-auto w-full border-b border-glass-border">
       {/* Section Title */}
       <div className="flex items-center gap-3 mb-16">
         <div className="p-2 rounded-lg bg-accent/15 border border-accent/30 text-accent">
