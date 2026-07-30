@@ -1,0 +1,14 @@
+[project]
+name = "mukesh-portfolio-backend"
+version = "0.1.0"
+description = "FastAPI backend with Gemini-based RAG chatbot for Mukesh's portfolio"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn>=0.30.0",
+    "google-genai>=0.1.1",
+    "numpy>=1.26.4",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.7.0",
+]
