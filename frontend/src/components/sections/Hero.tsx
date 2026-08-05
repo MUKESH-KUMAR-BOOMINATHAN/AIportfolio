@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { ArrowDownRight, Briefcase } from "lucide-react";
 import { motion, Variants } from "framer-motion";
-import StatItem from "@/components/ui/StatItem";
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -141,22 +140,6 @@ export default function Hero() {
         </div>
 
       </div>
-
-      {/* Stat Strip Banner */}
-      <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full bg-white/[0.03] backdrop-blur-md border-t border-white/10 py-8 mt-12 z-20 relative"
-      >
-        <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10 text-center">
-          <StatItem value="7 Mos" label="Industrial Experience" />
-          <StatItem value="7+" label="Projects Completed" />
-          <StatItem value="2" label="Internships" />
-          <StatItem value="8.32" label="Academic CGPA" />
-        </div>
-      </motion.div>
       
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes spin { 100% { transform: rotate(360deg); } }
