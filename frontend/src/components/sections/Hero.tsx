@@ -1,251 +1,166 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Download, Briefcase, Sparkles, MapPin, Terminal } from "lucide-react";
-
-const TITLES = ["Software Engineer", "AI Engineer", "Full Stack Developer"];
-
-function AgentTerminalMockup() {
-  const logs = [
-    { text: ">>> Initializing claims_investigation_graph..." },
-    { text: "[node:intake] Parsing incoming claim data (PDF)..." },
-    { text: "[node:retriever] Querying ChromaDB (vector-embedding)..." },
-    { text: "  -> Found 3 similar claims (Threshold Cosine >= 0.82)" },
-    { text: "[node:classifier] Executing Random Forest model..." },
-    { text: "  -> Anomaly Risk Score: 78.4% | SHAP logs generated." },
-    { text: "[node:llm_agent] Synthesizing recommendations via Gemini..." },
-    { text: "[system] Done. Graph complete. Adjuster alert sent! (1.4s)" },
-    { text: ">>> Waiting for new claim inputs..." }
-  ];
-
-  const [currentLogs, setCurrentLogs] = useState<string[]>([]);
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => {
-        const nextIndex = (prevIndex + 1) % (logs.length + 1);
-        if (nextIndex === 0) {
-          setCurrentLogs([]);
-          return 0;
-        } else {
-          setCurrentLogs(logs.slice(0, nextIndex).map(l => l.text));
-          return nextIndex;
-        }
-      });
-    }, 1800);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="w-full glass-panel rounded-2xl border border-glass-border p-4 shadow-2xl font-mono text-[10px] sm:text-xs text-white/90 overflow-hidden relative flex flex-col h-[290px] bg-black/40">
-      {/* Title bar */}
-      <div className="flex items-center justify-between pb-3 mb-3 border-b border-glass-border">
-        <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#EF4444] opacity-80" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B] opacity-80" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#10B981] opacity-80" />
-        </div>
-        <span className="text-[10px] text-muted font-semibold uppercase tracking-wider flex items-center gap-1">
-          <Terminal className="w-3.5 h-3.5 text-accent-secondary" />
-          <span>langgraph_agent.py</span>
-        </span>
-        <span className="w-8" />
-      </div>
-      {/* Console lines */}
-      <div className="flex-1 space-y-2 overflow-y-auto pr-1 text-left scrollbar-thin scrollbar-thumb-card scrollbar-track-transparent">
-        {currentLogs.map((log, idx) => {
-          let color = "text-white/80";
-          if (log.startsWith(">>>")) color = "text-accent font-bold";
-          else if (log.startsWith("[system]")) color = "text-success font-semibold";
-          else if (log.startsWith("  ->")) color = "text-accent-secondary font-medium";
-          else if (log.includes("[node")) color = "text-purple-400 font-semibold";
-          return (
-            <div key={idx} className={`${color} leading-relaxed transition-all duration-300`}>
-              {log}
-            </div>
-          );
-        })}
-        {/* Blinking cursor */}
-        <span className="inline-block w-1.5 h-4 bg-accent ml-1 animate-pulse" />
-      </div>
-    </div>
-  );
-}
+import React, { useEffect, useState } from "react";
+import { ArrowDownRight, Briefcase } from "lucide-react";
+import { motion, Variants } from "framer-motion";
+import StatItem from "@/components/ui/StatItem";
 
 export default function Hero() {
-  // Cursor coordinate tracking
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    setCoords({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-
-  // Typing effect logic
-  const [titleIndex, setTitleIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    const activeTitle = TITLES[titleIndex];
-    const typingSpeed = isDeleting ? 30 : 70;
-
-    if (!isDeleting && currentText === activeTitle) {
-      timer = setTimeout(() => setIsDeleting(true), 2000);
-    } else if (isDeleting && currentText === "") {
-      setIsDeleting(false);
-      setTitleIndex((prev) => (prev + 1) % TITLES.length);
-    } else {
-      timer = setTimeout(() => {
-        setCurrentText(
-          isDeleting
-            ? activeTitle.slice(0, currentText.length - 1)
-            : activeTitle.slice(0, currentText.length + 1)
-        );
-      }, typingSpeed);
-    }
-    return () => clearTimeout(timer);
-  }, [currentText, isDeleting, titleIndex]);
+    setMounted(true);
+  }, []);
 
   const triggerChat = () => {
     window.dispatchEvent(new Event("open-mukesh-ai"));
   };
 
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+    }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  const imageVariants: Variants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeOut", delay: 0.3 }
+    }
+  };
+
+  if (!mounted) return <div className="min-h-screen bg-black" />;
+
   return (
-    <section 
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      className="min-h-screen pt-24 pb-12 flex items-center justify-center relative overflow-hidden px-4 md:px-8 border-b border-glass-border cursor-default"
-      style={{
-        background: `radial-gradient(circle 450px at ${coords.x}px ${coords.y}px, rgba(59, 130, 246, 0.08), transparent 80%)`,
-      }}
-    >
-      {/* Background Subtle Mesh / Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none z-0" />
-      
-      {/* Ambient glowing blobs */}
-      <div className="absolute top-1/4 left-1/4 w-[300px] h-[300px] rounded-full bg-accent/10 blur-[100px] animate-pulse-slow pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] rounded-full bg-accent-secondary/10 blur-[90px] animate-pulse-slow pointer-events-none" />
-
-      {/* Hero Content Container - Responsive Grid */}
-      <div className="relative z-10 max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-center lg:text-left">
+    <section id="home" className="relative flex flex-col justify-center overflow-hidden py-12 md:py-16">
+      <div className="max-w-7xl mx-auto w-full px-4 md:px-8 flex-1 flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-0">
         
-        {/* Left Column: Headings & Copy */}
-        <div className="lg:col-span-7 flex flex-col items-center lg:items-start gap-6">
-          
-          {/* Status Tag */}
-          <motion.div 
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-xs text-accent font-semibold border border-accent/20 cursor-pointer"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            onClick={triggerChat}
-            whileHover={{ scale: 1.05 }}
+        {/* Left Content */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="lg:w-7/12 w-full pt-10 lg:pt-20 z-10"
+        >
+          <motion.h1
+            variants={itemVariants}
+            className="text-6xl sm:text-7xl lg:text-[7rem] leading-[0.85] font-heading font-black tracking-tighter text-white uppercase"
           >
-            <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: "3s" }} />
-            <span>HireMukeshkumar AI is Online & Ready</span>
-          </motion.div>
-
-          {/* Location Tag */}
-          <motion.div 
-            className="flex items-center gap-1.5 text-xs text-muted"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <MapPin className="w-3.5 h-3.5 text-red-500" />
-            <span>Chennai, Tamil Nadu, India</span>
-          </motion.div>
-
-          {/* Main Name Heading */}
-          <motion.h1 
-            className="text-4xl sm:text-5xl md:text-6xl font-heading font-extrabold tracking-tight text-white mt-1 leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            Mukeshkumar <span className="text-gradient-cyan">Boominathan</span>
+            AI & <br /> Full Stack <br /> Engineer<span className="text-accent">.</span>
           </motion.h1>
-
-          {/* Animated Cycling Titles */}
-          <motion.div 
-            className="h-10 flex items-center justify-center lg:justify-start text-xl sm:text-2xl md:text-3xl font-heading font-medium tracking-wide text-white/80"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+          <motion.p
+            variants={itemVariants}
+            className="mt-8 text-lg md:text-xl text-muted max-w-lg font-medium leading-relaxed"
           >
-            <span>I'm a&nbsp;</span>
-            <span className="text-accent-secondary border-r-2 border-accent-secondary pr-1 font-bold animate-pulse">
-              {currentText}
-            </span>
-          </motion.div>
-
-          {/* Short Objective */}
-          <motion.p 
-            className="text-muted text-sm sm:text-base leading-relaxed max-w-xl"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-          >
-            I'm a final-year CS student specialized in engineering robust web applications, 
-            RAG pipelines, and multi-agent graphs using LangGraph. I focus on building 
-            explainable, production-ready systems that solve real-world problems.
+            I'm a software engineer specializing in robust web applications, 
+            RAG pipelines, and multi-agent graphs. Building explainable, 
+            production-ready systems that solve real-world problems.
           </motion.p>
-
-          {/* CTAs */}
-          <motion.div 
-            className="flex flex-col sm:flex-row items-center gap-4 mt-4 w-full sm:w-auto"
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+          <motion.div
+            variants={itemVariants}
+            className="mt-12 flex flex-wrap items-center gap-6"
           >
             <a
               href="#projects"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white text-black hover:bg-white/90 px-6 py-3.5 rounded-xl font-semibold text-sm transition-all shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+              className="group flex items-center gap-4 bg-accent text-white py-4 px-6 uppercase font-bold tracking-widest text-sm hover:scale-105 active:scale-95 transition-all duration-300"
             >
-              <Briefcase className="w-4 h-4" />
-              <span>View Projects</span>
+              <span>View Work</span>
+              <div className="bg-black/20 group-hover:bg-black/10 rounded-full p-1 group-hover:-rotate-45 transition-transform duration-300">
+                <ArrowDownRight className="w-5 h-5" />
+              </div>
             </a>
-
             <button
               onClick={triggerChat}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-accent to-accent-secondary text-white px-6 py-3.5 rounded-xl font-semibold text-sm transition-all hover:shadow-lg hover:shadow-accent/20 border border-white/10 hover:-translate-y-0.5 active:translate-y-0 cursor-pointer"
+              className="group flex items-center gap-4 border border-white/20 text-white py-4 px-6 uppercase font-bold tracking-widest text-sm hover:scale-105 hover:bg-white hover:text-black active:scale-95 transition-all duration-300"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Chat with HireAI</span>
+              <Briefcase className="w-5 h-5" />
+              <span>Hire Me</span>
             </button>
+          </motion.div>
+        </motion.div>
 
-            <a
-              href="/resume.pdf"
-              download="Mukeshkumar_Boominathan_Resume.pdf"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-card border border-glass-border hover:border-accent-secondary/50 text-white px-6 py-3.5 rounded-xl font-semibold text-sm transition-all hover:-translate-y-0.5 active:translate-y-0"
+        {/* Right Image/Red Block */}
+        <div className="lg:w-5/12 w-full relative h-[500px] lg:h-[750px] lg:-mt-16 flex justify-end">
+          {/* Red block full-bleed to right */}
+          <motion.div 
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="absolute top-0 right-0 w-[120%] lg:w-[150%] h-full bg-accent -z-10 origin-right" 
+          />
+          
+          <motion.div 
+            variants={imageVariants}
+            initial="hidden"
+            animate="visible"
+            className="relative w-full h-full p-6 lg:p-10 flex flex-col justify-end lg:justify-center items-center"
+          >
+            <div className="relative w-full max-w-[360px] aspect-[4/5] overflow-hidden bg-white p-3 md:p-4 shadow-2xl">
+              <div className="w-full h-full relative overflow-hidden bg-black/20">
+              <img 
+                src="/profile.jpg" 
+                alt="Mukeshkumar Portrait"
+                className="w-full h-full object-cover object-top filter grayscale contrast-125"
+                onError={(e) => {
+                  e.currentTarget.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                }}
+              />
+            </div>
+          </div>
+            
+            {/* Rotating Badge */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8, duration: 0.6, type: "spring" }}
+              className="absolute bottom-4 left-4 lg:bottom-20 lg:-left-12 w-32 h-32 lg:w-40 lg:h-40 bg-black/80 backdrop-blur-md text-white rounded-full flex items-center justify-center border-4 border-accent animate-spin-slow shadow-2xl"
             >
-              <Download className="w-4 h-4" />
-              <span>Resume</span>
-            </a>
+              <svg viewBox="0 0 100 100" className="w-full h-full opacity-90" style={{ animation: "spin 10s linear infinite" }}>
+                <path id="curve" fill="transparent" d="M 50, 50 m -40, 0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" />
+                <text className="text-[11px] font-bold uppercase tracking-widest fill-current">
+                  <textPath href="#curve" startOffset="5%">
+                    * SOFTWARE ENGINEER * AI ENGINEER *
+                  </textPath>
+                </text>
+              </svg>
+            </motion.div>
           </motion.div>
         </div>
 
-        {/* Right Column: Interactive Terminal Mockup */}
-        <motion.div 
-          className="lg:col-span-5 w-full hidden lg:block"
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.4 }}
-        >
-          <AgentTerminalMockup />
-        </motion.div>
-
       </div>
+
+      {/* Stat Strip Banner */}
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="w-full bg-white/[0.03] backdrop-blur-md border-t border-white/10 py-8 mt-12 z-20 relative"
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/10 text-center">
+          <StatItem value="7 Mos" label="Industrial Experience" />
+          <StatItem value="7+" label="Projects Completed" />
+          <StatItem value="2" label="Internships" />
+          <StatItem value="8.32" label="Academic CGPA" />
+        </div>
+      </motion.div>
+      
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+      `}} />
     </section>
   );
 }

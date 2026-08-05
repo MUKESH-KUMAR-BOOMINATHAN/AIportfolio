@@ -2,12 +2,12 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import ExperienceCard from "@/components/ui/cards/ExperienceCard";
-import { EXPERIENCES } from "@/data/experience";
+import EducationCard from "@/components/ui/cards/EducationCard";
+import { EDUCATION } from "@/data/education";
 
-export default function Experience() {
+export default function Education() {
   return (
-    <section id="experience" className="py-16 md:py-24 px-4 md:px-8 w-full bg-black text-white">
+    <section id="education" className="py-16 md:py-24 px-4 md:px-8 w-full bg-black text-white border-t border-white/10">
       <div className="max-w-7xl mx-auto">
         
         <motion.div 
@@ -18,16 +18,16 @@ export default function Experience() {
           className="mb-16 border-b-2 border-white/20 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6"
         >
           <h2 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter">
-            Industry <br /> <span className="text-accent">Experience</span>
+            Academic <br /> <span className="text-accent">Background</span>
           </h2>
           <p className="text-muted max-w-sm text-sm uppercase font-bold tracking-widest leading-relaxed">
-            Building scalable AI platforms and enterprise full-stack applications in production environments.
+            Foundations in computer science and engineering principles.
           </p>
         </motion.div>
 
         <div className="space-y-8">
-          {EXPERIENCES.map((exp, idx) => (
-            <ExperienceCard key={idx} experience={exp} idx={idx} />
+          {EDUCATION.map((edu, idx) => (
+            <EducationCard key={idx} education={edu} idx={idx} />
           ))}
         </div>
 

@@ -3,10 +3,11 @@ import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Experience from "@/components/sections/Experience";
-import Skills from "@/components/sections/Skills";
+import Education from "@/components/sections/Education";
 import Projects from "@/components/sections/Projects";
 import BeyondTech from "@/components/sections/BeyondTech";
 import Certifications from "@/components/sections/Certifications";
+import Contact from "@/components/sections/Contact";
 import Footer from "@/components/layout/Footer";
 import HireMukeshAI from "@/components/ui/HireMukeshAI";
 
@@ -22,10 +23,11 @@ export default function Home() {
         <Hero />
         <About />
         <Experience />
-        <Skills />
+        <Education />
         <Projects />
         <BeyondTech />
         <Certifications />
+        <Contact />
       </main>
 
       {/* Footer block */}
