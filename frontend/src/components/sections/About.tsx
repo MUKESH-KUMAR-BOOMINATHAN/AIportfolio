@@ -3,6 +3,8 @@
 import React from "react";
 import { Download } from "lucide-react";
 import { motion } from "framer-motion";
+import SkillBar from "@/components/ui/SkillBar";
+import { SKILLS } from "@/data/skills";
 
 export default function About() {
   return (
@@ -53,6 +55,13 @@ export default function About() {
               auditable changed the way I think about engineering. It's not just about getting the LLM to output a response; 
               it's about building a system that teams can actually trust.
             </p>
+          </div>
+
+          {/* Skill Bars */}
+          <div className="space-y-6 max-w-xl">
+            {SKILLS.map((skill, idx) => (
+              <SkillBar key={idx} skill={skill} idx={idx} />
+            ))}
           </div>
 
           <div className="pt-4">
