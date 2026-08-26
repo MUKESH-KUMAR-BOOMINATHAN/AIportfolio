@@ -13,9 +13,9 @@ export default function Projects() {
   return (
     <section id="projects" className="py-16 md:py-24 px-4 md:px-8 w-full bg-black text-white">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -33,11 +33,11 @@ export default function Projects() {
         {/* 3-Column Image-Forward Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {PROJECTS.map((project, idx) => (
-            <ProjectCard 
-              key={idx} 
-              project={project} 
-              idx={idx} 
-              onClick={() => setSelectedProject(project)} 
+            <ProjectCard
+              key={idx}
+              project={project}
+              idx={idx}
+              onClick={() => setSelectedProject(project)}
             />
           ))}
         </div>
@@ -47,14 +47,14 @@ export default function Projects() {
       <AnimatePresence>
         {selectedProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-black/90 backdrop-blur-sm"
               onClick={() => setSelectedProject(null)}
             />
-            
+
             <motion.div
               className="bg-black/85 backdrop-blur-2xl w-full max-w-4xl max-h-[90vh] border border-white/10 relative z-10 flex flex-col shadow-2xl rounded-xl overflow-hidden"
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
@@ -74,8 +74,8 @@ export default function Projects() {
               <div className="overflow-y-auto flex flex-col md:flex-row">
                 {/* Modal Image */}
                 <div className="w-full md:w-2/5 h-64 md:min-h-[400px] relative border-b md:border-b-0 md:border-r border-white/10 overflow-hidden shrink-0">
-                  <img 
-                    src={selectedProject.image} 
+                  <img
+                    src={selectedProject.image}
                     alt={selectedProject.title}
                     className="w-full h-full object-cover filter grayscale hover:scale-105 transition-transform duration-700"
                   />
