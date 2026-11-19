@@ -30,23 +30,23 @@ export default function About() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="w-full max-w-sm lg:max-w-none lg:w-5/12 relative group"
         >
-          <motion.div
-            aria-hidden
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.7 }}
-            className="absolute top-6 -left-4 sm:-left-6 w-full h-full rounded-3xl bg-accent -z-0 group-hover:top-4 group-hover:-left-3 transition-all duration-500"
-          />
-          <div className="relative overflow-hidden rounded-3xl border border-white/20 bg-card aspect-[4/5]">
+          <div className="relative overflow-hidden rounded-3xl border border-white/15 bg-gradient-to-b from-accent to-[#7a0f09] aspect-[4/5]">
+            {/* oversized outline word behind the portrait */}
+            <span
+              aria-hidden
+              className="absolute -left-2 top-[6%] font-heading font-black uppercase leading-none tracking-tighter text-transparent text-[7.5rem] sm:text-[9rem] lg:text-[10rem] [-webkit-text-stroke:2px_rgba(255,255,255,0.35)] group-hover:[-webkit-text-stroke:2px_rgba(255,255,255,0.7)] transition-all duration-500 select-none"
+            >
+              Trust
+            </span>
+            <div aria-hidden className="absolute inset-0 bg-grid opacity-40" />
             <Image
-              src="/profile.webp"
-              alt="Mukeshkumar Boominathan by the coast"
+              src="/profile-bust-v2.webp"
+              alt="Mukeshkumar Boominathan"
               fill
               sizes="(max-width: 1024px) 384px, 520px"
-              className="object-cover object-[50%_60%] grayscale-[0.35] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+              className="object-cover object-[50%_0%] origin-bottom group-hover:scale-105 transition-transform duration-700 ease-out drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]"
             />
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            <div aria-hidden className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/70 to-transparent" />
           </div>
         </motion.div>
 
