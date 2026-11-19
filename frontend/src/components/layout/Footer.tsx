@@ -9,7 +9,7 @@ export default function Footer() {
 
   return (
     <footer className="w-full bg-black border-t border-white/10 py-8 px-4 md:px-8 z-10 relative">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 md:pr-36 pb-16 md:pb-0">
         <p className="text-xs text-muted uppercase tracking-widest font-bold">
           © {new Date().getFullYear()} Mukeshkumar Boominathan
         </p>

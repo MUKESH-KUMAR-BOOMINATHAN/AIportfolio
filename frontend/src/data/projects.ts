@@ -6,7 +6,13 @@ export interface ProjectItem {
   stack: string[];
   metrics: string[];
   github: string;
+  /** Optional live URL. A "Live Demo" button is shown only when this is set. */
   demo?: string;
+  /**
+   * Optional walkthrough video. Either a path under /public (e.g. "/demos/claims.mp4")
+   * or a YouTube/Loom embed URL. A "Watch Demo" player is shown only when set.
+   */
+  video?: string;
   architectureFlow?: string[];
   challengeAndSolution: {
     challenge: string;

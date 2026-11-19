@@ -3,18 +3,19 @@ import { Plus_Jakarta_Sans, Outfit } from "next/font/google";
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-body",
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
 
 const outfit = Outfit({
-  variable: "--font-heading",
+  variable: "--font-outfit",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://a-iportfolio-sigma.vercel.app"),
   title: "Mukeshkumar Boominathan | Software & AI Engineer Portfolio",
   description: "Explore the portfolio of Mukeshkumar Boominathan, a Chennai-based Software Engineer, AI Engineer, and Full Stack Developer. Experience with LangGraph, FastAPI, Next.js, and RAG. Chat with HireMukeshkumar AI.",
   keywords: [
@@ -37,10 +38,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mukeshkumar Boominathan | Software & AI Engineer Portfolio",
     description: "Explore Mukeshkumar Boominathan's projects, experience, and custom AI chatbot agent built with LangGraph, FastAPI, and Next.js.",
-    url: "https://mukesh-portfolio.vercel.app",
+    url: "https://a-iportfolio-sigma.vercel.app",
     siteName: "Mukeshkumar Boominathan Portfolio",
     locale: "en_US",
     type: "website",
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Mukeshkumar Boominathan" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mukeshkumar Boominathan | Software & AI Engineer Portfolio",
+    description: "Projects, experience and a custom RAG chatbot built with LangGraph, FastAPI and Next.js.",
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -71,7 +79,7 @@ export default function RootLayout({
       lang="en"
       className={`${plusJakartaSans.variable} ${outfit.variable} h-full scroll-smooth`}
     >
-      <body className="min-h-full bg-background text-foreground antialiased selection:bg-accent/30 selection:text-white flex flex-col font-sans">
+      <body className="bg-noise min-h-full bg-background text-foreground antialiased selection:bg-accent/30 selection:text-white flex flex-col font-sans">
         {children}
       </body>
     </html>

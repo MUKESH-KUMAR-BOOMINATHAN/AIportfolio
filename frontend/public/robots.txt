@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mukesh-portfolio.vercel.app/sitemap.xml
+Sitemap: https://a-iportfolio-sigma.vercel.app/sitemap.xml

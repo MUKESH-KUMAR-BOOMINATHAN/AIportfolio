@@ -5,10 +5,10 @@
   --foreground: #FFFFFF;
   --card: #0A0A0A;
   --accent: #E8281C; /* Bold Red */
-  --accent-secondary: #E8281C; /* Keep same for consistency */
-  --muted: #888888;
+  --accent-secondary: #FF6B4A;
+  --muted: #8F8F8F;
   --border-glass: #222222;
-  --bg-glass: #000000; /* No glass, solid black */
+  --bg-glass: #000000;
 }
 
 @theme {
@@ -20,24 +20,43 @@
   --color-muted: var(--muted);
   --color-glass-bg: var(--bg-glass);
   --color-glass-border: var(--border-glass);
-  
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-heading: "Inter", system-ui, sans-serif;
+
+  --font-sans: var(--font-jakarta), system-ui, sans-serif;
+  --font-heading: var(--font-outfit), var(--font-jakarta), system-ui, sans-serif;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+  --animate-shimmer: shimmer 3s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes pulse-ring {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    80%, 100% { transform: scale(2.2); opacity: 0; }
+  }
+  @keyframes shimmer {
+    from { background-position: 200% center; }
+    to { background-position: -200% center; }
+  }
+}
+
+html {
+  scroll-padding-top: 5rem;
 }
 
 /* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #000000;
-}
-::-webkit-scrollbar-thumb {
-  background: #222222;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #E8281C;
-}
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #000000; }
+::-webkit-scrollbar-thumb { background: #222222; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #E8281C; }
 
 body {
   background-color: var(--background);
@@ -46,20 +65,59 @@ body {
   overflow-x: hidden;
 }
 
-/* Redesign Utilities */
+/* Keyboard focus that is actually visible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- Visual utilities ---------- */
 .glass-panel {
-  background: var(--card);
-  border: 1px solid var(--border-glass);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
 }
 
 .text-gradient {
-  color: var(--foreground);
+  background: linear-gradient(90deg, #fff 0%, #fff 40%, var(--accent) 60%, #fff 80%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-shimmer);
 }
 
-.text-gradient-cyan {
-  color: var(--accent);
+.text-gradient-cyan { color: var(--accent); }
+
+/* Subtle engineering-grid background with fade */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 100%);
 }
 
-.glow-card::after {
-  display: none;
+/* Film-grain overlay for the whole page */
+.bg-noise::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.glow-card::after { display: none; }
+
+/* Respect users who ask for less motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -11,17 +11,20 @@ import Certifications from "@/components/sections/Certifications";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/layout/Footer";
 import HireMukeshAI from "@/components/ui/HireMukeshAI";
+import ScrollProgress from "@/components/ui/ScrollProgress";
+import CursorGlow from "@/components/ui/CursorGlow";
+import TechMarquee from "@/components/ui/TechMarquee";
 
 export default function Home() {
   return (
     <>
-      {/* Navigation Navbar */}
+      <ScrollProgress />
+      <CursorGlow />
       <Navbar />
 
-      {/* Main content wrapper */}
-      <main className="relative flex flex-col w-full z-10 pt-16 pb-24">
-        {/* Sections */}
+      <main className="relative flex flex-col w-full z-10 pb-24">
         <Hero />
+        <TechMarquee />
         <About />
         <Experience />
         <Education />
@@ -32,7 +35,6 @@ export default function Home() {
         <Contact />
       </main>
 
-      {/* Footer block */}
       <Footer />
 
       {/* Floating Chat Assistant RAG Drawer */}

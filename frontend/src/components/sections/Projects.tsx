@@ -1,18 +1,57 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight } from "lucide-react";
+import { X, ArrowRight, ExternalLink } from "lucide-react";
+import { GithubIcon } from "@/components/ui/BrandIcons";
 import { PROJECTS } from "@/data/projects";
 import type { ProjectItem } from "@/data/projects";
 import ProjectCard from "@/components/ui/cards/ProjectCard";
 
+/** Plays a local file with <video>, or any other URL (YouTube/Loom embed) in an iframe. */
+function DemoPlayer({ src, title }: { src: string; title: string }) {
+  const isFile = /\.(mp4|webm|mov)(\?.*)?$/i.test(src);
+  return (
+    <div className="aspect-video w-full overflow-hidden rounded-lg border border-white/10 bg-black">
+      {isFile ? (
+        <video src={src} controls playsInline preload="metadata" className="w-full h-full" />
+      ) : (
+        <iframe
+          src={src}
+          title={`${title} demo video`}
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="w-full h-full"
+        />
+      )}
+    </div>
+  );
+}
+
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
+  // Escape closes the modal; page scroll is locked while it is open.
+  useEffect(() => {
+    if (!selectedProject) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setSelectedProject(null);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [selectedProject]);
 
   return (
-    <section id="projects" className="py-16 md:py-24 px-4 md:px-8 w-full bg-black text-white">
-      <div className="max-w-7xl mx-auto">
+    <section id="projects" className="relative py-20 md:py-28 px-4 md:px-8 w-full bg-black text-white overflow-hidden">
+      <div aria-hidden className="absolute top-1/4 -left-40 w-[420px] h-[420px] rounded-full bg-accent/10 blur-[130px]" />
+      <div className="relative max-w-7xl mx-auto">
 
         {/* Section Header */}
         <motion.div
@@ -43,10 +82,12 @@ export default function Projects() {
         </div>
       </div>
 
-      {/* Architectural Detail Modal */}
+      {/* Architectural Detail Modal — portalled to <body> so it sits above the fixed navbar */}
+      {mounted &&
+        createPortal(
       <AnimatePresence>
         {selectedProject && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
+          <div className="fixed inset-0 z-[65] flex items-center justify-center p-4 md:p-8">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -56,6 +97,9 @@ export default function Projects() {
             />
 
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label={selectedProject.title}
               className="bg-black/85 backdrop-blur-2xl w-full max-w-4xl max-h-[90vh] border border-white/10 relative z-10 flex flex-col shadow-2xl rounded-xl overflow-hidden"
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
@@ -65,6 +109,7 @@ export default function Projects() {
               {/* Close button — fixed in top-right, never scrolls away */}
               <button
                 onClick={() => setSelectedProject(null)}
+                aria-label="Close project details"
                 className="absolute top-4 right-4 p-2.5 text-muted hover:text-white bg-black/80 backdrop-blur-md border border-white/20 rounded-lg transition-all z-30 hover:scale-110 active:scale-95 hover:border-accent"
               >
                 <X className="w-5 h-5" />
@@ -73,11 +118,11 @@ export default function Projects() {
               {/* Scrollable interior */}
               <div className="overflow-y-auto flex flex-col md:flex-row">
                 {/* Modal Image */}
-                <div className="w-full md:w-2/5 h-64 md:min-h-[400px] relative border-b md:border-b-0 md:border-r border-white/10 overflow-hidden shrink-0">
+                <div className="w-full md:w-2/5 h-64 md:h-[90vh] md:sticky md:top-0 md:self-start relative border-b md:border-b-0 md:border-r border-white/10 overflow-hidden shrink-0">
                   <img
                     src={selectedProject.image}
                     alt={selectedProject.title}
-                    className="w-full h-full object-cover filter grayscale hover:scale-105 transition-transform duration-700"
+                    className="absolute inset-0 w-full h-full object-cover grayscale hover:grayscale-0 hover:scale-105 transition-all duration-700"
                   />
                   <div className="absolute inset-0 bg-accent/20 mix-blend-multiply" />
                 </div>
@@ -97,6 +142,13 @@ export default function Projects() {
                     <p className="text-muted text-sm font-medium leading-relaxed">
                       {selectedProject.longDesc}
                     </p>
+
+                    {selectedProject.video && (
+                      <div>
+                        <h4 className="text-xs font-black text-white uppercase tracking-widest mb-3">Watch Demo</h4>
+                        <DemoPlayer src={selectedProject.video} title={selectedProject.title} />
+                      </div>
+                    )}
 
                     <div className="border border-white/10 p-6 space-y-4 bg-white/[0.03] backdrop-blur-md rounded-lg">
                       <div>
@@ -135,13 +187,29 @@ export default function Projects() {
                     </div>
                   </div>
 
-                  <div className="pt-8 border-t border-white/10">
+                  <div className="pt-8 border-t border-white/10 flex flex-wrap gap-3">
+                    {selectedProject.demo && (
+                      <a
+                        href={selectedProject.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-3 bg-accent text-white px-8 py-4 text-xs font-black uppercase tracking-widest rounded-lg hover:bg-white hover:text-black hover:scale-105 active:scale-95 transition-all duration-300"
+                      >
+                        <span>Live Demo</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    )}
                     <a
                       href={selectedProject.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-3 bg-accent text-white px-8 py-4 text-xs font-black uppercase tracking-widest rounded-lg hover:bg-white hover:text-black hover:scale-105 active:scale-95 transition-all duration-300 group"
+                      className={`inline-flex items-center gap-3 px-8 py-4 text-xs font-black uppercase tracking-widest rounded-lg hover:scale-105 active:scale-95 transition-all duration-300 group ${
+                        selectedProject.demo
+                          ? "border border-white/25 text-white hover:bg-white hover:text-black"
+                          : "bg-accent text-white hover:bg-white hover:text-black"
+                      }`}
                     >
+                      {selectedProject.demo && <GithubIcon className="w-4 h-4" />}
                       <span>View Repository</span>
                       <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
                     </a>
@@ -151,7 +219,9 @@ export default function Projects() {
             </motion.div>
           </div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+          document.body
+        )}
     </section>
   );
 }
